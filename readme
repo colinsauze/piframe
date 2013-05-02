@@ -1,0 +1,37 @@
+Installation:
+
+setup GPG key:
+
+on  the pi
+
+	gpg --gen-key 
+	gpg --export > key
+
+now copy the key file to the email processing system
+
+	gpg --import key 
+	
+	
+
+on the webserver
+	copy the map directory to the server if you want checkin support, change line 6 of savelocation.php to the path of your checkin directory
+	make a directory for the piframe
+
+on the pi
+	change download_photos.sh line 20 to the URL on your web server
+	install fbi
+	install sakis3g 
+	if you are using 3g,  change connect3g.sh  and edit the lines defining the APN, USER and PASSWORD variables to those of your provider.
+	
+on the email downloader
+	install php5-imap and php5-imagick packages (tested on debian/ubuntu only) 
+	
+	change email_processor/config.sh and email_processor/config.php to setup the email address, email password, server, protocol and port
+	make a cron job to run email_processor/run.sh at regular intervals 
+		or
+	write a wrapper script to run this when needed
+	
+	
+
+	
+	

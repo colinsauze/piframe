@@ -1,0 +1,54 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          bootlogo
+# Required-Start:    
+# Required-Stop:     
+# Should-Start:      
+# Should-Stop:       
+# Default-Start:     S
+# Default-Stop:      0 1 6
+# Short-Description: boot splash screen display
+# Description:       boot splash screen display using the fbi framebuffer image viewer. 
+### END INIT INFO
+
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+DESC="bootlogo"
+NAME=bootlogo
+PIDFILE=/var/run/bootlogo.pid
+PROGRAM="/usr/bin/fbi"
+ARGS="--noverbose -vt 1 /home/pi/piframe/loading.png"
+SCRIPTNAME=/etc/init.d/"$NAME"
+
+. /lib/lsb/init-functions
+
+
+case "$1" in
+start)	log_daemon_msg "Starting splash screen" "bootlogo"
+	#$PROGRAM
+        start_daemon -p $PIDFILE $PROGRAM $ARGS
+        log_end_msg $?
+    ;;
+stop)	log_daemon_msg "Stopping splash screen" "bootlogo"
+        killproc -p $PIDFILE $DAEMON
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && [ -e "$PIDFILE" ] && rm -f $PIDFILE
+        log_end_msg $RETVAL
+        ;;
+restart) log_daemon_msg "Restarting splash screen" "bootlogo" 
+        $0 stop
+        $0 start
+        ;;
+reload|force-reload) log_daemon_msg "Restarting splash screen" "bootlogo"
+    # cron reloads automatically
+        log_end_msg 0
+        ;;
+status)
+        status_of_proc -p $PIDFILE $DAEMON $NAME && exit 0 || exit $?
+        ;;
+*)	log_action_msg "Usage: /etc/init.d/bootlogo {start|stop|status|restart|reload|force-reload}"
+        exit 2
+        ;;
+esac
+exit 0
+
